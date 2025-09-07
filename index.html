@@ -3,88 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Redirecionando...</title>
   <style>
     body {
-      background-color: #000000; /* Fundo preto */
+      background-color: #FFFFFF;
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .loading-container {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    h1 {
-      font-size: 18px;
-      color: #FFFFFF; /* Texto branco */
-      margin-bottom: 20px;
     }
     .loading {
       animation: rotate 1s linear infinite;
-      border: 5px solid #4F4F4F; /* Cinza escuro */
-      border-top: 5px solid #00FF00; /* Parte superior em verde */
+      border: 5px solid #F3F3F3;
+      border-top: 5px solid #3498DB;
       border-radius: 50%;
       height: 50px;
       width: 50px;
+      margin: 20px auto;
     }
     @keyframes rotate {
-      0% {
-        transform: rotate(0);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
+      0% { transform: rotate(0); }
+      100% { transform: rotate(360deg); }
+    }
+    h1 {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 24px;
     }
   </style>
   <script>
-    // Função para fazer a requisição ao webhook do n8n
-    async function obterNumeros() {
-      try {
-        console.log('Iniciando requisição ao webhook...');
-        const response = await fetch('https://webhook.previas.shop/webhook/presselaulajon', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        console.log('Resposta recebida do webhook:', response);
-        if (!response.ok) {
-          throw new Error('Erro na requisição ao webhook');
-        }
-        const data = await response.json();
-        console.log('Dados recebidos do webhook:', data);
-        return data.numbers;
-      } catch (error) {
-        console.error('Erro ao obter os números do webhook:', error);
-        throw error;
-      }
+    // Lista de números
+    const numeros = [
+      '5516981321068',
+      '5516988235752'
+    ];
+
+    // Lista de 8 mensagens (já codificadas para URL)
+        const mensagens = [
+      'Oi%2C%20vi%20que%20você%20tem%20conteúdos%20interessantes.%20Pode%20me%20mostrar%3F',
+      'Oii%2C%20curti%20seu%20perfil%20e%20quero%20ver%20seus%20conteúdos%20%F0%9F%91%80',
+      'Eai%21%20Pode%20me%20mandar%20seus%20conteúdos%3F%20Fiquei%20curioso%28a%29%20%F0%9F%98%84',
+      'Oi%2C%20tudo%20bem%3F%20Quero%20dar%20uma%20olhada%20no%20seu%20conteúdo',
+      'Olá%2C%20vi%20algo%20interessante%20por%20aqui%20e%20quero%20ver%20seus%20conteúdos%21',
+      'Opa%21%20Me%20manda%20seus%20conteúdos%20por%20favor%2C%20t%C3%B4%20curioso%28a%29%20%F0%9F%98%89',
+      'Oi%2C%20cheguei%20aqui%20por%20indica%C3%A7%C3%A3o%2C%20me%20envia%20seus%20conte%C3%BAdos%20%F0%9F%91%8D',
+      'Quero%20ver%20o%20que%20voc%C3%AA%20tem%20de%20bom%20a%C3%AD%20%F0%9F%98%81%20Pode%20mandar%3F',
+      'Oi%2C%20vi%20algo%20legal%20sobre%20seus%20conte%C3%BAdos%20e%20quero%20conferir%20%F0%9F%98%8A',
+      'Tudo%20bem%3F%20Pode%20me%20mostrar%20seus%20conte%C3%BAdos%3F%20Me%20interessei%20%F0%9F%93%9D',
+      'Vi%20seu%20link%20e%20fiquei%20curioso%20pra%20ver%20o%20conte%C3%BAdo%21%20Pode%20mandar%3F%20%F0%9F%91%80',
+      'Oi%2C%20recebi%20a%20recomenda%C3%A7%C3%A3o%20dos%20seus%20conte%C3%BAdos%20e%20quero%20ver%20sim%21%20%F0%9F%98%84'
+    ];
+
+    // Redireciona aleatoriamente
+    function redirecionar() {
+      const numero = numeros[Math.floor(Math.random() * numeros.length)];
+      const mensagem = mensagens[Math.floor(Math.random() * mensagens.length)];
+      const link = 'https://wa.me/' + numero + '?text=' + mensagem;
+      window.location.href = link;
     }
 
-    // Função para redirecionar para um grupo de WhatsApp aleatório
-    async function redirecionar() {
-      try {
-        const numeros = await obterNumeros();
-        const numeroAleatorio = numeros[Math.floor(Math.random() * numeros.length)];
-        const url = `https://api.whatsapp.com/send?phone=${numeroAleatorio}&text=Oi,%20quero%20conversar%20com%20voce!`;
-        console.log('Redirecionando para:', url);
-        window.location.href = url;
-      } catch (error) {
-        console.error('Erro ao obter os números ou redirecionar:', error);
-        // URL de fallback em caso de erro
-        window.location.href = 'https://api.whatsapp.com/send?phone=5516981321068&text=Oi,%20tudo%20bem%20gata%20?';
-      }
+    // Facebook Pixel
+    function enviarPixel() {
+      fbq('track', 'PageView');
     }
+  </script>
 
-   </script>
   <!-- Pixel do Facebook -->
   <script>
     !function(f,b,e,v,n,t,s)
@@ -96,15 +78,13 @@
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1231146574174330');
-    fbq('track', 'Pageview');
+    fbq('track', 'PageView');
   </script>
-
 </head>
-<body onload="redirecionar(); enviarPixel();">
-  <div class="loading-container">
-    <h1>Aguarde um momento por favor...</h1>
-    <div class="loading"></div>
-  </div>
+<body onload="setTimeout(redirecionar, 5000); enviarPixel();">
+  <div class="loading"></div>
+  <h1>Aguarde alguns segundos, vou liberar o que prometi para você...</h1>
 </body>
 </html>
+
 
